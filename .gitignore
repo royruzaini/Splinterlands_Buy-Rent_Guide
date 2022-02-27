@@ -1,0 +1,11 @@
+.vscode/
+__pycache__/
+__pycache__
+build/
+dist/
+old/
+node_modules/
+.env
+test.py
+test2.py
+*.json
