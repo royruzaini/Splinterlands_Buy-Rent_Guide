@@ -1,4 +1,4 @@
-"""Splinterlands_Teams_Guide URL Configuration
+"""Splinterlands_Buy-Rent_Guide URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/

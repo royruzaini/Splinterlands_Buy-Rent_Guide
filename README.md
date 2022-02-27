@@ -1,5 +1,5 @@
-## Splinterlands_Teams_Guide
-A tool to guide you for team selection based on mana and ruleset using your owned cards.
+## Splinterlands_Buy-Rent_Guide
+A tool to guide you for buy or rent card based on most use card was played.
 
 ## Built With
 
@@ -18,12 +18,12 @@ The tool can be run on the following OS:
 2. Clone the repo: 
 
       ```sh
-      git clone https://github.com/royruzaini/Splinterlands_Teams_Guide.git
+      git clone https://github.com/royruzaini/Splinterlands_Buy-Rent_Guide.git
       ```
 
 3. Go to repo directory
       ```sh
-      cd Splinterlands_Teams_Guide
+      cd Splinterlands_Buy-Rent_Guide
       ```
 
 4. Install the required libraries by running: 
@@ -31,17 +31,17 @@ The tool can be run on the following OS:
       pip install -r requirements.txt
       ```
       
-5. Download the collection.json from discord below. Copy the file into Splinterlands_Teams_Guide directory
+5. Download the collection.json from discord below. Copy the file into Splinterlands_Buy-Rent_Guide directory
 
 # How to use
 
-Before using, you should always update to the latest available version. You can do so by going into the Splinterlands_Teams_Guide directory and executing the following command:
+Before using, you should always update to the latest available version. You can do so by going into the Splinterlands_Buy-Rent_Guide directory and executing the following command:
 
 ```sh
 git pull
 ```
 
-Go into the Splinterlands_Teams_Guide directory and run the command with the file. Examples:
+Go into the Splinterlands_Buy-Rent_Guide directory and run the command with the file. Examples:
 
 ```sh
 python manage.py runserver

@@ -1,5 +1,5 @@
 """
-ASGI config for Splinterlands_Teams_Guide project.
+ASGI config for Splinterlands_Buy-Rent_Guide project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Splinterlands_Teams_Guide.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Splinterlands_Buy-Rent_Guide.settings')
 
 application = get_asgi_application()
