@@ -33,6 +33,8 @@ The tool can be run on the following OS:
       
 5. Download the collection.json from discord below. Copy the file into Splinterlands_Buy-Rent_Guide directory
 
+6. Convert `.env-example` to `.env`
+
 # How to use
 
 Before using, you should always update to the latest available version. You can do so by going into the Splinterlands_Buy-Rent_Guide directory and executing the following command:
