@@ -9,5 +9,6 @@ urlpatterns = [
     path('water/',views.Api.getteamblue, name='get-team-blue'),
     path('fire/',views.Api.getteamred, name='get-team-red'),
     path('earth/',views.Api.getteamgreen, name='get-team-green'),
-    path('dragon/',views.Api.getteamgold, name='get-team-gold')
+    path('dragon/',views.Api.getteamgold, name='get-team-gold'),
+    path('custom/',views.Api.getteamcustom, name='get-team-custom')
 ]

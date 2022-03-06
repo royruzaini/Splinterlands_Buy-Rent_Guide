@@ -2447,3 +2447,1142 @@ class Api(TemplateView):
         else:
             data = "No " + splinterteam + " Team Available"
             return HttpResponse(data)
+
+    def getteamcustom(request):
+
+            mana = request.GET.get("mana")
+            if mana == "ALL":
+                mana = 99
+            rule1 = request.GET.get("rule1")
+            rule2 = request.GET.get("rule2")
+            splinterteam = ['Fire', 'Water', 'Earth', 'Life', 'Death', 'Dragon']
+
+            summoner_custom = request.GET.get("summnoner")
+            monster_1_custom = request.GET.get("monster_1")
+            monster_2_custom = request.GET.get("monster_2")
+            monster_3_custom = request.GET.get("monster_3")
+            monster_4_custom = request.GET.get("monster_4")
+            monster_5_custom = request.GET.get("monster_5")
+            monster_6_custom = request.GET.get("monster_6")
+
+            with open("mycards.json") as file:
+                mycards = json.load(file)
+            file.close
+
+            def filter_deck(battle):
+                if mana == "ALL" and rule1 == "ALL" and rule2 == "None":
+                    if battle['summoner_splinter'] in splinterteam:
+                        return True
+                    else:
+                        return False
+                elif mana != "ALL" and rule1 == "ALL" and rule2 == "None":
+                    if battle['mana_cap'] == int(mana) and battle['summoner_splinter'] in splinterteam:
+                        return True
+                    else:
+                        return False
+                elif mana == "ALL" and rule1 != "ALL" and rule2 == "None":
+                    if battle['ruleset'] == rule1 and  battle['summoner_splinter'] in splinterteam:
+                        return True
+                    else:
+                        return False
+                elif mana != "ALL" and rule1 != "ALL" and rule2 == "None":
+                    if battle['ruleset'] == rule1 and battle['mana_cap'] == int(mana) and battle['summoner_splinter'] in splinterteam:
+                        return True
+                    else:
+                        return False
+                elif mana == "ALL" and rule1 != "ALL" and rule2 != "None":
+                    rule = rule1+"|"+rule2
+                    if battle['ruleset'] == rule and battle['summoner_splinter'] in splinterteam:
+                        return True
+                    else:
+                        return False
+                elif mana != "ALL" and rule1 != "ALL" and rule2 != "None":
+                    rule = rule1+"|"+rule2
+                    if battle['ruleset'] == rule and battle['mana_cap'] == int(mana) and battle['summoner_splinter'] in splinterteam:
+                        return True
+                    else:
+                        return False
+
+            db_decks = list(filter(filter_deck, BATTLEBASE))
+
+            def filter_deck_custom(battle):
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    return True
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_2_id'] == int(monster_2_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom):
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_3_id'] == int(monster_3_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom)  \
+                        and battle['monster_3_id'] == int(monster_3_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) and battle['monster_5_id'] == int(monster_5_custom):
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) and battle['monster_5_id'] == int(monster_5_custom):
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) and battle['monster_5_id'] == int(monster_5_custom):
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) and battle['monster_5_id'] == int(monster_5_custom):
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) and battle['monster_5_id'] == int(monster_5_custom):
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) and battle['monster_5_id'] == int(monster_5_custom):
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) and battle['monster_5_id'] == int(monster_5_custom):
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom == '':
+                    if battle['monster_4_id'] == int(monster_4_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom):
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom == '':
+                    if battle['monster_5_id'] == int(monster_5_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom):
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom != '' and monster_6_custom != '':
+                    if battle['monster_1_id'] == int(monster_1_custom) and battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_5_id'] == int(monster_5_custom) and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom != '':
+                    if battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom != '' and monster_5_custom == '' and monster_6_custom != '':
+                    if battle['monster_4_id'] == int(monster_4_custom) \
+                        and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom != '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom != '':
+                    if battle['monster_3_id'] == int(monster_3_custom) \
+                        and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom == '' and monster_2_custom != '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom != '':
+                    if battle['monster_2_id'] == int(monster_2_custom) \
+                        and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom == '' and monster_1_custom != '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom != '':
+                    if battle['monster_1_id'] == int(monster_1_custom) \
+                        and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+                if summoner_custom != '' and monster_1_custom == '' and monster_2_custom == '' \
+                    and monster_3_custom == '' and monster_4_custom == '' and monster_5_custom == '' and monster_6_custom != '':
+                    if battle['summoner_id'] == int(summoner_custom) \
+                        and battle['monster_6_id'] == int(monster_6_custom) :
+                        return True
+                    else:
+                        return False
+
+            db_decks = list(filter(filter_deck_custom, db_decks))
+
+            possible_decks = []
+
+            viable = False
+            team = {}
+            Bestsummoner = []
+            Bestmonster = []
+            Besttank = []
+
+            for battle in db_decks:
+                summoner = [str(card['id']) for card in mycards if card['id'] == battle['summoner_id']]
+                if not summoner:
+                    continue
+                else:
+                    summoner = list(set(summoner))
+                    summoner = int(''.join(summoner))
+                    Bestsummoner.append(summoner)
+
+            # checks if player has card with battle summoner card_detail_id
+            if len(Bestsummoner) == 0:
+                viable = False
+            else:
+                mostusesummoner = mode(Bestsummoner)
+                team['summoner_id'] = mostusesummoner
+                team['summoner_level'] = 1
+                team['summoner_splinter'] = splinter(monster_color(int(mostusesummoner)))
+                frequency = Bestsummoner.count(mostusesummoner)
+                ratio = round((frequency/len(Bestsummoner)) * 100, 2)
+                team['summoner_frequency'] = frequency
+                team['summoner_ratio'] = str(ratio) + '%'
+                cardmana = summoner_mana(int(mostusesummoner))
+                BalanceMana = int(mana) - cardmana
+            
+                teamtoplay = {}
+                teamtoplay = [battle for battle in db_decks if battle['summoner_id'] == mostusesummoner]
+
+                if len(teamtoplay) > 0:
+
+                    for battle in teamtoplay:
+                        tank = [str(card['id']) for card in mycards if card['id'] == battle['monster_1_id']]
+                        if not tank:
+                            continue
+                        else:
+                            tank = list(set(tank))
+                            tank = int(''.join(tank))
+                            Besttank.append(tank)
+
+                    if len(Besttank) > 0:
+                        viable = True
+                        mostusetank = mode(Besttank)
+                        team['monster_1_id'] = mostusetank
+                        team['monster_1_level'] = 1
+                        team['monster_1_abilities'] = monster_abilities(int(mostusetank))
+                        team['monster_1_splinter'] = splinter(monster_color(int(mostusetank)))
+                        frequency = Besttank.count(mostusetank)
+                        ratio = round((frequency/len(Besttank)) * 100, 2)
+                        team['monster_1_frequency'] = frequency
+                        team['monster_1_ratio'] = str(ratio) + '%'
+                        cardmana = monster_mana(int(mostusetank))
+                        BalanceMana = BalanceMana - cardmana
+
+                        teamtoplay = {}
+                        teamtoplay = [battle for battle in db_decks if battle['summoner_id'] == mostusesummoner and battle['monster_1_id'] == mostusetank]
+
+                        for x in range(2, 7):
+                            
+                            if battle['monster_'+str(x)+'_id'] != "":
+
+                                Bestmonster = []
+
+                                for battle in teamtoplay:
+                                    monster = [str(card['id']) for card in mycards if card['id'] == battle['monster_'+str(x)+'_id']]
+                                    if not monster:
+                                        continue
+                                    else:
+                                        monster = list(set(monster))
+                                        monster = int(''.join(monster))
+                                        Bestmonster.append(monster)
+
+                                if len(Bestmonster) > 0:
+                                    mostusemonster = mode(Bestmonster)
+                                    frequency = Bestmonster.count(mostusemonster)
+                                    ratio = round((frequency/len(Bestmonster)) * 100, 2)
+                                    cardmana = monster_mana(int(mostusemonster))
+                                    
+                                    if BalanceMana > 0 and BalanceMana >= cardmana :
+                                        if x == 2:
+                                            if mostusemonster == team['monster_'+str(x-1)+'_id']:
+                                                team['monster_'+str(x)+'_id'] = ""
+                                                team['monster_'+str(x)+'_level'] = ""
+                                                team['monster_'+str(x)+'_abilities'] = []
+                                                team['monster_'+str(x)+'_splinter'] = ""
+                                                team['monster_'+str(x)+'_frequency'] = ""
+                                                team['monster_'+str(x)+'_ratio'] = ""
+                                            else:
+                                                if team['monster_'+str(x-1)+'_id'] == "":
+                                                    team['monster_'+str(x-1)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x-1)+'_level'] = 1
+                                                    team['monster_'+str(x-1)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x-1)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x-1)+'_frequency'] = frequency
+                                                    team['monster_'+str(x-1)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                                    team['monster_'+str(x)+'_id'] = ""
+                                                    team['monster_'+str(x)+'_level'] = ""
+                                                    team['monster_'+str(x)+'_abilities'] = []
+                                                    team['monster_'+str(x)+'_splinter'] = ""
+                                                    team['monster_'+str(x)+'_frequency'] = ""
+                                                    team['monster_'+str(x)+'_ratio'] = ""
+                                                else:
+                                                    team['monster_'+str(x)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x)+'_level'] = 1
+                                                    team['monster_'+str(x)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x)+'_frequency'] = frequency
+                                                    team['monster_'+str(x)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                        if x == 3:
+                                            if mostusemonster == team['monster_'+str(x-1)+'_id'] or mostusemonster == team['monster_'+str(x-2)+'_id']:
+                                                team['monster_'+str(x)+'_id'] = ""
+                                                team['monster_'+str(x)+'_level'] = ""
+                                                team['monster_'+str(x)+'_abilities'] = []
+                                                team['monster_'+str(x)+'_splinter'] = ""
+                                                team['monster_'+str(x)+'_frequency'] = ""
+                                                team['monster_'+str(x)+'_ratio'] = ""
+                                            else:
+                                                if team['monster_'+str(x-1)+'_id'] == "":
+                                                    team['monster_'+str(x-1)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x-1)+'_level'] = 1
+                                                    team['monster_'+str(x-1)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x-1)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x-1)+'_frequency'] = frequency
+                                                    team['monster_'+str(x-1)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                                    team['monster_'+str(x)+'_id'] = ""
+                                                    team['monster_'+str(x)+'_level'] = ""
+                                                    team['monster_'+str(x)+'_abilities'] = []
+                                                    team['monster_'+str(x)+'_splinter'] = ""
+                                                    team['monster_'+str(x)+'_frequency'] = ""
+                                                    team['monster_'+str(x)+'_ratio'] = ""
+                                                else:
+                                                    team['monster_'+str(x)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x)+'_level'] = 1
+                                                    team['monster_'+str(x)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x)+'_frequency'] = frequency
+                                                    team['monster_'+str(x)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                        if x == 4:
+                                            if mostusemonster == team['monster_'+str(x-1)+'_id'] or mostusemonster == team['monster_'+str(x-2)+'_id'] or mostusemonster == team['monster_'+str(x-3)+'_id']:
+                                                team['monster_'+str(x)+'_id'] = ""
+                                                team['monster_'+str(x)+'_level'] = ""
+                                                team['monster_'+str(x)+'_abilities'] = []
+                                                team['monster_'+str(x)+'_splinter'] = ""
+                                                team['monster_'+str(x)+'_frequency'] = ""
+                                                team['monster_'+str(x)+'_ratio'] = ""
+                                            else:
+                                                if team['monster_'+str(x-1)+'_id'] == "":
+                                                    team['monster_'+str(x-1)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x-1)+'_level'] = 1
+                                                    team['monster_'+str(x-1)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x-1)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x-1)+'_frequency'] = frequency
+                                                    team['monster_'+str(x-1)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                                    team['monster_'+str(x)+'_id'] = ""
+                                                    team['monster_'+str(x)+'_level'] = ""
+                                                    team['monster_'+str(x)+'_abilities'] = []
+                                                    team['monster_'+str(x)+'_splinter'] = ""
+                                                    team['monster_'+str(x)+'_frequency'] = ""
+                                                    team['monster_'+str(x)+'_ratio'] = ""
+                                                else:
+                                                    team['monster_'+str(x)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x)+'_level'] = 1
+                                                    team['monster_'+str(x)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x)+'_frequency'] = frequency
+                                                    team['monster_'+str(x)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                        if x == 5:
+                                            if mostusemonster == team['monster_'+str(x-1)+'_id'] or mostusemonster == team['monster_'+str(x-2)+'_id'] or mostusemonster == team['monster_'+str(x-3)+'_id'] or mostusemonster == team['monster_'+str(x-4)+'_id']:
+                                                team['monster_'+str(x)+'_id'] = ""
+                                                team['monster_'+str(x)+'_level'] = ""
+                                                team['monster_'+str(x)+'_abilities'] = []
+                                                team['monster_'+str(x)+'_splinter'] = ""
+                                                team['monster_'+str(x)+'_frequency'] = ""
+                                                team['monster_'+str(x)+'_ratio'] = ""
+                                            else:
+                                                if team['monster_'+str(x-1)+'_id'] == "":
+                                                    team['monster_'+str(x-1)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x-1)+'_level'] = 1
+                                                    team['monster_'+str(x-1)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x-1)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x-1)+'_frequency'] = frequency
+                                                    team['monster_'+str(x-1)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                                    team['monster_'+str(x)+'_id'] = ""
+                                                    team['monster_'+str(x)+'_level'] = ""
+                                                    team['monster_'+str(x)+'_abilities'] = []
+                                                    team['monster_'+str(x)+'_splinter'] = ""
+                                                    team['monster_'+str(x)+'_frequency'] = ""
+                                                    team['monster_'+str(x)+'_ratio'] = ""
+                                                else:
+                                                    team['monster_'+str(x)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x)+'_level'] = 1
+                                                    team['monster_'+str(x)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x)+'_frequency'] = frequency
+                                                    team['monster_'+str(x)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                        if x == 6:
+                                            if mostusemonster == team['monster_'+str(x-1)+'_id'] or mostusemonster == team['monster_'+str(x-2)+'_id'] or mostusemonster == team['monster_'+str(x-3)+'_id'] or mostusemonster == team['monster_'+str(x-4)+'_id'] or mostusemonster == team['monster_'+str(x-5)+'_id']:
+                                                team['monster_'+str(x)+'_id'] = ""
+                                                team['monster_'+str(x)+'_level'] = ""
+                                                team['monster_'+str(x)+'_abilities'] = []
+                                                team['monster_'+str(x)+'_splinter'] = ""
+                                                team['monster_'+str(x)+'_frequency'] = ""
+                                                team['monster_'+str(x)+'_ratio'] = ""
+                                            else:
+                                                if team['monster_'+str(x-1)+'_id'] == "":
+                                                    team['monster_'+str(x-1)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x-1)+'_level'] = 1
+                                                    team['monster_'+str(x-1)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x-1)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x-1)+'_frequency'] = frequency
+                                                    team['monster_'+str(x-1)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                                    team['monster_'+str(x)+'_id'] = ""
+                                                    team['monster_'+str(x)+'_level'] = ""
+                                                    team['monster_'+str(x)+'_abilities'] = []
+                                                    team['monster_'+str(x)+'_splinter'] = ""
+                                                    team['monster_'+str(x)+'_frequency'] = ""
+                                                    team['monster_'+str(x)+'_ratio'] = ""
+                                                else:
+                                                    team['monster_'+str(x)+'_id'] = mostusemonster
+                                                    team['monster_'+str(x)+'_level'] = 1
+                                                    team['monster_'+str(x)+'_abilities'] =  monster_abilities(int(mostusemonster))
+                                                    team['monster_'+str(x)+'_splinter'] = splinter(monster_color(int(mostusemonster)))
+                                                    team['monster_'+str(x)+'_frequency'] = frequency
+                                                    team['monster_'+str(x)+'_ratio'] = str(ratio) + '%'
+                                                    BalanceMana = BalanceMana - cardmana
+                                    else:
+                                        team['monster_'+str(x)+'_id'] = ""
+                                        team['monster_'+str(x)+'_level'] = ""
+                                        team['monster_'+str(x)+'_abilities'] = []
+                                        team['monster_'+str(x)+'_splinter'] = ""
+                                        team['monster_'+str(x)+'_frequency'] = ""
+                                        team['monster_'+str(x)+'_ratio'] = ""
+                                else:
+                                    team['monster_'+str(x)+'_id'] = ""
+                                    team['monster_'+str(x)+'_level'] = ""
+                                    team['monster_'+str(x)+'_abilities'] = []
+                                    team['monster_'+str(x)+'_splinter'] = ""
+                                    team['monster_'+str(x)+'_frequency'] = ""
+                                    team['monster_'+str(x)+'_ratio'] = ""
+                            else:
+                                team['monster_'+str(x)+'_id'] = ""
+                                team['monster_'+str(x)+'_level'] = ""
+                                team['monster_'+str(x)+'_abilities'] = []
+                                team['monster_'+str(x)+'_splinter'] = ""
+                                team['monster_'+str(x)+'_frequency'] = ""
+                                team['monster_'+str(x)+'_ratio'] = ""
+                    else:
+                        viable = False
+                else:
+                    viable = False
+            if viable:
+                possible_decks.append(team)
+
+            if len(possible_decks) != 0:
+
+                for battle in possible_decks:
+
+                    most_win_deck = {}
+
+                    most_win_deck['card'] = []         
+                    most_win_deck['card'].append('summoner')
+                    most_win_deck['id'] = []
+                    most_win_deck['id'].append(battle['summoner_id'])
+                    most_win_deck['name'] = []
+                    most_win_deck['name'].append(card_name(int(battle['summoner_id'])))
+                    most_win_deck['splinter'] = []
+                    most_win_deck['splinter'].append(splinter(monster_color(int(battle['summoner_id']))))
+                    most_win_deck['frequency'] = []
+                    most_win_deck['frequency'].append(battle['summoner_frequency'])
+                    most_win_deck['ratio'] = []
+                    most_win_deck['ratio'].append(battle['summoner_ratio'])
+
+                    for x in range(0, 6):
+                        if battle['monster_'+str(x+1)+'_id'] != "" :
+                            most_win_deck['card'].append('monster_'+str(x+1))
+                            most_win_deck['id'].append(battle['monster_'+str(x+1)+'_id'])
+                            most_win_deck['name'].append(card_name(int(battle['monster_'+str(x+1)+'_id'])))
+                            most_win_deck['splinter'].append(splinter(monster_color(int(battle['monster_'+str(x+1)+'_id']))))
+                            most_win_deck['frequency'].append(battle['monster_'+str(x+1)+'_frequency'])
+                            most_win_deck['ratio'].append(battle['monster_'+str(x+1)+'_ratio'])
+
+                df = pd.DataFrame(most_win_deck)
+                data = df.to_html(classes='table table-bordered')
+                return HttpResponse(data)
+            else:
+                data = "No Team Available"
+                return HttpResponse(data)

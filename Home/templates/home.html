@@ -232,16 +232,63 @@
 </div>
 <br><br>
 
+<h1>
+    Enter the card's ID to find most used cards pair with it.<br>
+</h1>
+
+<table>
+    <tr>
+        <tr style="background-color: darkcyan;">
+            <th>Card Details:</th>
+            <th style="background-color: darkcyan;"></th>
+            <th>Team Details:</th>
+        </tr>
+        <td>
+            <label style="display: inline-block;">Summoners ID:</label>
+            <input style="display: inline-block;" id="summnoner" type="text" size="5">
+            <br>
+            <label style="display: inline-block;">Monster #1 ID:</label>
+            <input style="display: inline-block;" id="monster_1" type="text" size="5">
+            <br>
+            <label style="display: inline-block;">Monster #2 ID:</label>
+            <input style="display: inline-block;" id="monster_2" type="text" size="5">
+            <br>
+            <label style="display: inline-block;">Monster #3 ID:</label>
+            <input style="display: inline-block;" id="monster_3" type="text" size="5">
+            <br>
+            <label style="display: inline-block;">Monster #4 ID:</label>
+            <input style="display: inline-block;" id="monster_4" type="text" size="5">
+            <br>
+            <label style="display: inline-block;">Monster #5 ID:</label>
+            <input style="display: inline-block;" id="monster_5" type="text" size="5">
+            <br>
+            <label style="display: inline-block;">Monster #6 ID:</label>
+            <input style="display: inline-block;" id="monster_6" type="text" size="5">
+            <br>
+        </td>
+        <td style="background-color: darkcyan;"></tdstyle></td>
+        <td>
+            <div id="teamcustom"></div><br>
+        </td>
+    </tr>
+
+</table>
+<br><br>
+
 <table>
     <tr style="background-color: darkcyan;">
         <th>Life Team:</th>
         <th style="background-color: darkcyan;"></th>
         <th>Death Team:</th>
+        <th style="background-color: darkcyan;"></th>
+        <th>Water Team:</th>
     </tr>
     <tr style="background-color: cadetblue;">
         <th>Life Team Detail:</th>
         <th style="background-color: darkcyan;"></th>
         <th>Death Team Detail:</th>
+        <th style="background-color: darkcyan;"></th>
+        <th>Water Team Detail:</th>
     </tr>
     <tr>
         <td>
@@ -251,39 +298,30 @@
         <td>
             <div id="teamblack"></div>
         </td>
-    </tr>
-    <tr style="background-color: darkcyan;">
-        <th>Water Team:</th>
-        <th style="background-color: darkcyan;"></th>
-        <th>Fire Team:</th>
-    </tr>
-    <tr style="background-color: cadetblue;">
-        <th>Water Team Detail:</th>
-        <th style="background-color: darkcyan;"></th>
-        <th>Fire Team Detail:</th>
-    </tr>
-    <tr>
-    <tr>
+        <td style="background-color: darkcyan;"></td>
         <td>
             <div id="teamblue"></div><br>
         </td>
-        <td style="background-color: darkcyan;"></td>
-        <td>
-            <div id="teamred"></div>
-        </td>
     </tr>
     <tr style="background-color: darkcyan;">
+        <th>Fire Team:</th>
+        <th style="background-color: darkcyan;"></th>
         <th>Earth Team:</th>
         <th style="background-color: darkcyan;"></th>
         <th>Dragon Team:</th>
     </tr>
     <tr style="background-color: cadetblue;">
+        <th>Fire Team Detail:</th>
+        <th style="background-color: darkcyan;"></th>
         <th>Earth Team Detail:</th>
         <th style="background-color: darkcyan;"></th>
         <th>Dragon Team Detail:</th>
     </tr>
     <tr>
-    <tr>
+        <td>
+            <div id="teamred"></div>
+        </td>
+        <td style="background-color: darkcyan;"></tdstyle></td>
         <td>
             <div id="teamgreen"></div><br>
         </td>
@@ -293,6 +331,9 @@
         </td>
     </tr>
 </table>
+
+
+
 <script>
     // Make API calls
     function Submit() {
@@ -302,6 +343,7 @@
         fire();
         earth();
         dragon();
+        custom();
      }
     function life(){
         var mana = document.getElementById('mana').value;
@@ -398,6 +440,22 @@
         fetch('{% url 'get-my-card' %}'+"?username="+username+"&edition="+edition+"&rarity="+rarity+"&NoLegend="+NoLegendCheck+"&NoLegendSummoners="+NoLegendSummonersCheck)
         .then(res => res.text())
 		.then(data => document.getElementById('result').innerHTML = data)
+	}
+    function custom(){
+        var mana = document.getElementById('mana').value;
+        var rule1 = document.getElementById('rule1').value;
+        var rule2 = document.getElementById('rule2').value;
+        var summnoner = document.getElementById('summnoner').value;
+        var monster_1 = document.getElementById('monster_1').value;
+        var monster_2 = document.getElementById('monster_2').value;
+        var monster_3 = document.getElementById('monster_3').value;
+        var monster_4 = document.getElementById('monster_4').value;
+        var monster_5 = document.getElementById('monster_5').value;
+        var monster_6 = document.getElementById('monster_6').value;
+        fetch('{% url 'get-team-custom' %}'+"?mana="+mana+"&rule1="+rule1+"&rule2="+rule2
+        +"&summnoner="+summnoner+"&monster_1="+monster_1+"&monster_2="+monster_2+"&monster_3="+monster_3+"&monster_4="+monster_4+"&monster_5="+monster_5+"&monster_6="+monster_6)
+        .then(res => res.text())
+		.then(data => document.getElementById('teamcustom').innerHTML = data)
 	}
 </script>
 {% endblock %}
